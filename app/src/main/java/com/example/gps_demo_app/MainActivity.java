@@ -1,11 +1,15 @@
 package com.example.gps_demo_app;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,12 +31,18 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.jspecify.annotations.NonNull;
 
-public class MainActivity extends AppCompatActivity {
-    TextView tv_lat, tv_lon , tv_altitude ,tv_accuracy , tv_speed, tv_sensor , tv_updates, tv_address;
-    Switch sw_locationupdates , sw_gps;
-    LocationRequest locationRequest;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
+public class MainActivity extends AppCompatActivity {
+    TextView tv_lat, tv_lon , tv_altitude ,tv_accuracy , tv_speed, tv_sensor , tv_updates, tv_address , tv_wayPointCount;
+    Switch sw_locationupdates , sw_gps;
+    Button btn_newWaypoint,btn_showWaypointList,btn_showMap;
+    LocationRequest locationRequest;
     LocationCallback locationCallBack;
+    Location currentLocation;
+    List<Location> savedLocations;
     FusedLocationProviderClient fusedLocationProviderClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +58,19 @@ public class MainActivity extends AppCompatActivity {
         tv_sensor = findViewById(R.id.tv_sensor);
         tv_updates = findViewById(R.id.tv_updates);
         tv_address = findViewById(R.id.tv_address);
+        tv_wayPointCount = findViewById(R.id.tv_wayPointCount);
         sw_gps = findViewById(R.id.sw_gps);
         sw_locationupdates = findViewById(R.id.sw_locationsupdates);
+        btn_newWaypoint = findViewById(R.id.btn_newWayPoint);
+        btn_showWaypointList = findViewById(R.id.btn_showWayPointList);
+        btn_showMap =findViewById(R.id.btn_showMap);
         locationCallBack = new LocationCallback() {
             @Override
             public void onLocationResult(@androidx.annotation.NonNull LocationResult locationResult) {
                 super.onLocationResult(locationResult);
-                updateUIValues(locationResult.getLastLocation());
+                Location latestLocation = locationResult.getLocations()
+                        .get(locationResult.getLocations().size() - 1);
+                updateUIValues(latestLocation);
             }
         };
         locationRequest = new LocationRequest.Builder(
@@ -86,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        updateGPS();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -103,18 +118,51 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+        startLocationUpdates();
+        btn_newWaypoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentLocation != null) {
+                    MyApplication myApplication = (MyApplication) getApplicationContext();
+                    myApplication.getMyLocations().add(currentLocation); // ✅ Thêm trực tiếp vào danh sách toàn cục
+
+                    // Cập nhật số waypoint
+                    tv_wayPointCount.setText(String.valueOf(myApplication.getMyLocations().size()));
+
+                    Toast.makeText(MainActivity.this, "Đã lưu vị trí hiện tại!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Chưa có vị trí hiện tại để lưu!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btn_showWaypointList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, ShowLocationList.class);
+                startActivity(i);
+            }
+        });
+        btn_showMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, MapsActivity.class);
+                startActivity(i);
+            }
+        });
+    }//end oncreate
     private void startLocationUpdates(){
-        tv_updates.setText("Đã bật định vị");
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-            fusedLocationProviderClient.removeLocationUpdates(locationCallBack);
-            updateGPS();
-        } else {
-            Toast.makeText(this, "Chưa được cấp quyền vị trí", Toast.LENGTH_SHORT).show();
+        if (fusedLocationProviderClient == null) {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 99);
+            return;
+        }
+
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallBack, null);
+        updateGPS();
+        tv_updates.setText("Đã bật định vị");
     }
     private void stopLocationUpdates() {
         tv_updates.setText("Đã ngừng định vị");
@@ -123,28 +171,27 @@ public class MainActivity extends AppCompatActivity {
         tv_speed.setText("----");
         tv_accuracy.setText("----");
         tv_altitude.setText("----");
+        tv_address.setText("----");
         fusedLocationProviderClient.removeLocationUpdates(locationCallBack);
 
     }
 
     private void updateGPS(){
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MainActivity.this);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        updateUIValues(location);
-                    } else {
-                        Toast.makeText(MainActivity.this,
-                                "Không thể lấy vị trí hiện tại ",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
+                    .addOnSuccessListener(this, location -> {
+                        if (location != null) {
+                            updateUIValues(location);
+                            currentLocation = location;
+                        } else {
+                            Toast.makeText(MainActivity.this, "Không thể lấy vị trí hiện tại", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(MainActivity.this, "Lỗi lấy vị trí: " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
         } else {
             // Nếu chưa có quyền thì yêu cầu quyền
@@ -180,5 +227,17 @@ public class MainActivity extends AppCompatActivity {
         }else{
             tv_speed.setText("Không tìm thấy");
         }
+        Geocoder geocoder = new Geocoder(MainActivity.this, new Locale("vi", "VN"));
+            try{
+                List<Address> addresses =geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                tv_address.setText(addresses.get(0).getAddressLine(0));
+            }catch(Exception e){
+                tv_address.setText("Không thể lâý địa chỉ");
+            }
+
+
+            MyApplication myApplication = (MyApplication)getApplicationContext();
+            savedLocations = myApplication.getMyLocations();
+            tv_wayPointCount.setText(Integer.toString(savedLocations.size()));
     }
 }

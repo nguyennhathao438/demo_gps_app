@@ -162,7 +162,21 @@
         android:text="Address:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_labelspeed" />
-
+    <TextView
+        android:id="@+id/tv_labelwaypoint"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Waypoint:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_labelsensor" />
+    <TextView
+        android:id="@+id/tv_wayPointCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        app:layout_constraintStart_toEndOf="@+id/tv_labelwaypoint"
+        app:layout_constraintTop_toTopOf="@+id/tv_labelwaypoint" />
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
@@ -172,5 +186,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_address" />
+
+    <Button
+        android:id="@+id/btn_newWayPoint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="THÊM ĐỊNH VỊ"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_labelwaypoint" />
+
+    <Button
+        android:id="@+id/btn_showWayPointList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="DANH SÁCH VỊ TRÍ"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_newWayPoint" />
+
+    <Button
+        android:id="@+id/btn_showMap"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="HIỆN BẢN ĐỒ"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_showWayPointList" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
