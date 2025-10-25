@@ -38,7 +38,9 @@ android {
 dependencies {
     //Thư viện vị trí của google
     implementation("com.google.android.gms:play-services-location:21.3.0")
-    
+
+    implementation("com.google.maps.android:android-maps-utils:3.4.0")
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

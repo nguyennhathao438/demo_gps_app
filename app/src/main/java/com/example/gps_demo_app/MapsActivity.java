@@ -2,18 +2,33 @@ package com.example.gps_demo_app;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CustomCap;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.gps_demo_app.databinding.ActivityMapsBinding;
+import com.google.android.gms.maps.model.PatternItem;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import kotlinx.coroutines.internal.Symbol;
 
 //Lấy apikey trên google cloud
 //Vào library bật Maps SDK for Android
@@ -49,19 +64,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        LatLng lastLocationPlaced = sydney;
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        for (Location l : locationList){
-            LatLng latLng = new LatLng(l.getLatitude(),l.getLongitude());
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            markerOptions.title("Lat:"+l.getLatitude()+" Lon:"+l.getLongitude());
-            mMap.addMarker(markerOptions);
-            lastLocationPlaced = latLng;
+
+        if (locationList == null || locationList.isEmpty()) {
+            Toast.makeText(this, "Không có dữ liệu vị trí", Toast.LENGTH_SHORT).show();
+            return;
         }
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocationPlaced,12.0f));
+
+        // Tạo danh sách LatLng từ locationList
+        List<LatLng> pathPoints = new ArrayList<>();
+        for (Location l : locationList) {
+            LatLng latLng = new LatLng(l.getLatitude(), l.getLongitude());
+            pathPoints.add(latLng);
+            mMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title("Lat: " + l.getLatitude() + " | Lon: " + l.getLongitude()));
+        }
+
+        // Vẽ đường đi
+        PolylineOptions polylineOptions = new PolylineOptions()
+                .addAll(pathPoints)
+                .width(10)
+                .color(Color.BLUE)
+                .geodesic(true);
+
+        Polyline polyline = mMap.addPolyline(polylineOptions);
+
+        // Nếu bạn muốn mũi tên nằm dọc đường — tạo pattern
+        polyline.setPattern(Arrays.asList(
+                new Dash(30), // khoảng cách giữa các nét
+                new Gap(20)   // khoảng cách trống
+        ));
+
+        // Zoom đến điểm cuối
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                pathPoints.get(pathPoints.size() - 1), 14f
+        ));
     }
+
 }
