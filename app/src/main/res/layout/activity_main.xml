@@ -1,223 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
-    <TextView
-        android:id="@+id/tv_labellat"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Lat:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_lat"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="0.00"
-        app:layout_constraintStart_toEndOf="@+id/tv_labellat"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="16dp"
+        tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/tv_labellon"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="lon:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labellat" />
+        <!-- Lat -->
+        <TextView
+            android:id="@+id/tv_labellat"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Lat:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_lon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="0.00"
-        app:layout_constraintStart_toEndOf="@+id/tv_labellon"
-        app:layout_constraintTop_toBottomOf="@+id/tv_lat" />
+        <TextView
+            android:id="@+id/tv_lat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            app:layout_constraintStart_toEndOf="@id/tv_labellat"
+            app:layout_constraintTop_toTopOf="@id/tv_labellat"
+            app:layout_constraintBottom_toBottomOf="@id/tv_labellat"
+            android:layout_marginStart="8dp" />
 
-    <TextView
-        android:id="@+id/tv_labelaltitude"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Altitude:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labellon" />
+        <!-- Lon -->
+        <TextView
+            android:id="@+id/tv_labellon"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Lon:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_labellat"
+            android:layout_marginTop="16dp" />
 
-    <TextView
-        android:id="@+id/tv_altitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0.00"
-        app:layout_constraintStart_toEndOf="@+id/tv_labelaltitude"
-        app:layout_constraintTop_toTopOf="@+id/tv_labelaltitude" />
+        <TextView
+            android:id="@+id/tv_lon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            app:layout_constraintStart_toEndOf="@id/tv_labellon"
+            app:layout_constraintTop_toTopOf="@id/tv_labellon"
+            app:layout_constraintBottom_toBottomOf="@id/tv_labellon"
+            android:layout_marginStart="8dp" />
 
-    <TextView
-        android:id="@+id/tv_labelaccuracy"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Accuracy:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelaltitude" />
+        <!-- Altitude -->
+        <TextView
+            android:id="@+id/tv_labelaltitude"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Altitude:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_labellon"
+            android:layout_marginTop="16dp" />
 
-    <TextView
-        android:id="@+id/tv_accuracy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0.00"
-        app:layout_constraintStart_toEndOf="@+id/tv_labelaccuracy"
-        app:layout_constraintTop_toTopOf="@+id/tv_labelaccuracy" />
+        <TextView
+            android:id="@+id/tv_altitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            app:layout_constraintStart_toEndOf="@id/tv_labelaltitude"
+            app:layout_constraintTop_toTopOf="@id/tv_labelaltitude"
+            app:layout_constraintBottom_toBottomOf="@id/tv_labelaltitude"
+            android:layout_marginStart="8dp" />
 
-    <TextView
-        android:id="@+id/tv_labelspeed"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Speed:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelaccuracy" />
+        <!-- Accuracy -->
+        <TextView
+            android:id="@+id/tv_labelaccuracy"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Accuracy:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_labelaltitude"
+            android:layout_marginTop="16dp" />
 
-    <TextView
-        android:id="@+id/tv_speed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0.00"
-        app:layout_constraintStart_toEndOf="@+id/tv_labelspeed"
-        app:layout_constraintTop_toTopOf="@+id/tv_labelspeed" />
+        <TextView
+            android:id="@+id/tv_accuracy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            app:layout_constraintStart_toEndOf="@id/tv_labelaccuracy"
+            app:layout_constraintTop_toTopOf="@id/tv_labelaccuracy"
+            app:layout_constraintBottom_toBottomOf="@id/tv_labelaccuracy"
+            android:layout_marginStart="8dp" />
 
-    <TextView
-        android:id="@+id/tv_labelsensor"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Sensor:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sw_gps" />
+        <!-- Speed -->
+        <TextView
+            android:id="@+id/tv_labelspeed"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Speed:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_labelaccuracy"
+            android:layout_marginTop="16dp" />
 
-    <TextView
-        android:id="@+id/tv_sensor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cell Tower + Wifi"
-        app:layout_constraintStart_toEndOf="@+id/tv_labelsensor"
-        app:layout_constraintTop_toTopOf="@+id/tv_labelsensor" />
+        <TextView
+            android:id="@+id/tv_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            app:layout_constraintStart_toEndOf="@id/tv_labelspeed"
+            app:layout_constraintTop_toTopOf="@id/tv_labelspeed"
+            app:layout_constraintBottom_toBottomOf="@id/tv_labelspeed"
+            android:layout_marginStart="8dp" />
 
-    <TextView
-        android:id="@+id/tv_labelupdates"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="Updates:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sw_locationsupdates" />
+        <!-- Address Label and Value -->
+        <TextView
+            android:id="@+id/tv_lbladdress"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Address:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_labelspeed"
+            android:layout_marginTop="16dp" />
 
-    <TextView
-        android:id="@+id/tv_updates"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Off"
-        app:layout_constraintStart_toEndOf="@+id/tv_labelupdates"
-        app:layout_constraintTop_toTopOf="@+id/tv_labelupdates" />
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="N/A"
+            app:layout_constraintStart_toEndOf="@id/tv_lbladdress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_lbladdress"
+            android:layout_marginStart="8dp" />
 
-    <Switch
-        android:id="@+id/sw_locationsupdates"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:checked="true"
-        android:text="Location Updates"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        <!-- Sensor -->
+        <TextView
+            android:id="@+id/tv_labelsensor"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Sensor:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_address"
+            android:layout_marginTop="16dp" />
 
-    <Switch
-        android:id="@+id/sw_gps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="GPS/SavePower"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelupdates" />
+        <TextView
+            android:id="@+id/tv_sensor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cell Tower + Wifi"
+            app:layout_constraintStart_toEndOf="@id/tv_labelsensor"
+            app:layout_constraintTop_toTopOf="@id/tv_labelsensor"
+            android:layout_marginStart="8dp" />
 
-    <TextView
-        android:id="@+id/tv_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/tv_lbladdress"
-        app:layout_constraintTop_toTopOf="@+id/tv_lbladdress" />
+        <!-- Waypoint -->
+        <TextView
+            android:id="@+id/tv_labelwaypoint"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Waypoint:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_labelsensor"
+            android:layout_marginTop="16dp" />
 
-    <TextView
-        android:id="@+id/tv_lbladdress"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Address:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelspeed" />
-    <TextView
-        android:id="@+id/tv_labelwaypoint"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Waypoint:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelsensor" />
-    <TextView
-        android:id="@+id/tv_wayPointCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        app:layout_constraintStart_toEndOf="@+id/tv_labelwaypoint"
-        app:layout_constraintTop_toTopOf="@+id/tv_labelwaypoint" />
-    <View
-        android:id="@+id/divider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="32dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_address" />
+        <TextView
+            android:id="@+id/tv_wayPointCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            app:layout_constraintStart_toEndOf="@id/tv_labelwaypoint"
+            app:layout_constraintTop_toTopOf="@id/tv_labelwaypoint"
+            android:layout_marginStart="8dp" />
 
-    <Button
-        android:id="@+id/btn_newWayPoint"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="THÊM ĐỊNH VỊ"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelwaypoint" />
+        <!-- Divider -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_labelwaypoint"
+            android:layout_marginTop="32dp" />
 
-    <Button
-        android:id="@+id/btn_showWayPointList"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="DANH SÁCH VỊ TRÍ"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_newWayPoint" />
+        <!-- Switches -->
 
-    <Button
-        android:id="@+id/btn_showMap"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="HIỆN BẢN ĐỒ"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_showWayPointList" />
+        <Switch
+            android:id="@+id/sw_locationsupdates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Location Updates"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            android:layout_marginTop="16dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Switch
+            android:id="@+id/sw_gps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GPS/SavePower"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sw_locationsupdates"
+            android:layout_marginTop="16dp" />
+
+        <!-- Updates Label and Value -->
+
+        <TextView
+            android:id="@+id/tv_labelupdates"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Updates:"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sw_gps"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/tv_updates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Off"
+            app:layout_constraintStart_toEndOf="@id/tv_labelupdates"
+            app:layout_constraintTop_toTopOf="@id/tv_labelupdates"
+            android:layout_marginStart="8dp" />
+
+        <!-- Buttons -->
+
+        <Button
+            android:id="@+id/btn_newWayPoint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="THÊM ĐỊNH VỊ"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_labelupdates"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btn_showWayPointList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="DANH SÁCH VỊ TRÍ"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_newWayPoint"
+            android:layout_marginTop="12dp" />
+
+        <Button
+            android:id="@+id/btn_showMap"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="HIỆN BẢN ĐỒ"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_showWayPointList"
+            android:layout_marginTop="12dp" />
+        <Button
+            android:id="@+id/btn_viewUserLocations"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="XEM VỊ TRÍ USER"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_showMap"
+            android:layout_marginTop="12dp" />
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="ĐĂNG XUẤT"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_viewUserLocations"
+            android:layout_marginTop="12dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -71,13 +71,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         // Tạo danh sách LatLng từ locationList
+        int lastIndex = locationList.size() - 1;
         List<LatLng> pathPoints = new ArrayList<>();
-        for (Location l : locationList) {
+        for (int i = 0; i < locationList.size(); i++) {
+            Location l = locationList.get(i);
             LatLng latLng = new LatLng(l.getLatitude(), l.getLongitude());
             pathPoints.add(latLng);
-            mMap.addMarker(new MarkerOptions()
+
+            MarkerOptions markerOptions = new MarkerOptions()
                     .position(latLng)
-                    .title("Lat: " + l.getLatitude() + " | Lon: " + l.getLongitude()));
+                    .title("Lat: " + l.getLatitude() + " | Lon: " + l.getLongitude());
+
+            if (i == lastIndex) {
+                // Vị trí hiện tại (mới nhất) - marker đỏ
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            } else {
+                // Các vị trí khác - marker mặc định (màu xanh dương)
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            }
+
+            mMap.addMarker(markerOptions);
         }
 
         // Vẽ đường đi
@@ -89,7 +102,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Polyline polyline = mMap.addPolyline(polylineOptions);
 
-        // Nếu bạn muốn mũi tên nằm dọc đường — tạo pattern
         polyline.setPattern(Arrays.asList(
                 new Dash(30), // khoảng cách giữa các nét
                 new Gap(20)   // khoảng cách trống

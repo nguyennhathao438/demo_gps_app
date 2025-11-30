@@ -2,6 +2,7 @@ package com.example.gps_demo_app;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -38,17 +39,22 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     TextView tv_lat, tv_lon , tv_altitude ,tv_accuracy , tv_speed, tv_sensor , tv_updates, tv_address , tv_wayPointCount;
     Switch sw_locationupdates , sw_gps;
-    Button btn_newWaypoint,btn_showWaypointList,btn_showMap;
+    Button btn_newWaypoint,btn_showWaypointList,btn_showMap,btn_logout,btn_viewUserLocations;
     LocationRequest locationRequest;
     LocationCallback locationCallBack;
     Location currentLocation;
     List<Location> savedLocations;
+
+    DBHelper dbHelper;
     FusedLocationProviderClient fusedLocationProviderClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        dbHelper = new DBHelper(this);
 
         tv_lat = findViewById(R.id.tv_lat);
         tv_lon = findViewById(R.id.tv_lon);
@@ -64,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
         btn_newWaypoint = findViewById(R.id.btn_newWayPoint);
         btn_showWaypointList = findViewById(R.id.btn_showWayPointList);
         btn_showMap =findViewById(R.id.btn_showMap);
+        btn_logout = findViewById(R.id.btn_logout);
+        btn_viewUserLocations = findViewById(R.id.btn_viewUserLocations);
         locationCallBack = new LocationCallback() {
             @Override
             public void onLocationResult(@androidx.annotation.NonNull LocationResult locationResult) {
@@ -130,6 +138,15 @@ public class MainActivity extends AppCompatActivity {
                     tv_wayPointCount.setText(String.valueOf(myApplication.getMyLocations().size()));
 
                     Toast.makeText(MainActivity.this, "Đã lưu vị trí hiện tại!", Toast.LENGTH_SHORT).show();
+                    SharedPreferences sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                    int userId = sharedPref.getInt("user_id", -1);
+                    dbHelper.addLocation(
+                            userId,
+                            currentLocation.getLatitude(),
+                            currentLocation.getLongitude(),
+                            currentLocation.hasAltitude() ? currentLocation.getAltitude() : 0,
+                            System.currentTimeMillis()
+                    );
                 } else {
                     Toast.makeText(MainActivity.this, "Chưa có vị trí hiện tại để lưu!", Toast.LENGTH_SHORT).show();
                 }
@@ -149,6 +166,33 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(MainActivity.this, MapsActivity.class);
                 startActivity(i);
             }
+        });
+
+        btn_viewUserLocations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MapsUserActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.clear();  // Xóa toàn bộ dữ liệu (hoặc editor.remove("user_id"), editor.remove("username") nếu chỉ muốn xóa từng key)
+                editor.apply();
+                MyApplication myApplication = (MyApplication)getApplicationContext();
+                myApplication.getMyLocations().clear();
+                // Chuyển về màn hình Login
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                // Xóa stack activity để không thể back lại MainActivity
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
+
         });
     }//end oncreate
     private void startLocationUpdates(){
